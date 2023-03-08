@@ -62,8 +62,8 @@ class LoginForm extends Component {
     history.replace('/')
   }
 
-  onSubmitFailure = () => {
-    this.setState({errorMsg: '*Username and password did not match'})
+  onSubmitFailure = msg => {
+    this.setState({errorMsg: msg})
   }
 
   submitForm = async event => {
@@ -81,14 +81,10 @@ class LoginForm extends Component {
     const data = await response.json()
     console.log(data)
 
-    if (username === '') {
-      this.setState({errorMsg: '*Username is empty'})
-    } else if (password === '') {
-      this.setState({errorMsg: '*Password is empty'})
-    } else if (response.ok === true) {
+    if (response.ok === true) {
       this.onSubmitSuccess()
     } else {
-      this.onSubmitFailure()
+      this.onSubmitFailure(data.error_msg)
     }
   }
 
@@ -116,10 +112,10 @@ class LoginForm extends Component {
             />
             {this.renderUsername()}
             {this.renderPassword()}
-            <p className="wrong-details">{errorMsg}</p>
             <button type="submit" className="login-btn">
               Login
             </button>
+            <p className="wrong-details">{errorMsg}</p>
           </form>
         </div>
       </div>
